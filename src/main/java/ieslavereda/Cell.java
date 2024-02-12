@@ -42,6 +42,17 @@ public class Cell {
         this.piece = piece;
     }
 
+    public void highlight(){
+        if(originalColor== Color.WHITE)
+            this.color = (piece!=null)? Color.HIGHLIGHT_KILL_WHITE : Color.HIGHLIGHT_WHITE;
+        else
+            this.color = (piece!=null)? Color.HIGHLIGHT_KILL_BLACK : Color.HIGHLIGHT_BLACK;
+    }
+
+    public void removeHighLight(){
+        this.color = originalColor;
+    }
+
     @Override
     public String toString(){
         if(piece==null){
@@ -53,6 +64,10 @@ public class Cell {
 
     public Color getColor() {
         return color;
+    }
+
+    public boolean isEmpty() {
+        return piece==null;
     }
 
     public enum Color {

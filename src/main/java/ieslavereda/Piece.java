@@ -2,25 +2,84 @@ package ieslavereda;
 
 import com.diogonunes.jcolor.Attribute;
 
+import java.util.Set;
+
 import static com.diogonunes.jcolor.Ansi.colorize;
 
-public class Piece {
+public abstract class Piece {
 
     private Type type;
     private Cell cell;
-
     public Piece(Type type, Cell cell){
         this.type = type;
         this.cell = cell;
+        place();
+    }
+    protected void place() {
+        if(cell!=null)
+            cell.setPiece(this);
+    }
+    protected boolean canAddToNextMovements(Coordinate c) {
+
+        Board board = getCell().getBoard();
+
+        if(!board.contains(c)) return false;
+
+        if(board.getCellAt(c).isEmpty()) return true;
+
+        if(board.getCellAt(c).getPiece().getColor()!=getColor()) return true;
+
+        return false;
+    }
+    public boolean canMoveTo(Coordinate coordinate){
+        return getNextMovements().contains(coordinate);
+    }
+
+    public void remove(){
+        if(cell!=null)
+            cell.setPiece(null);
+        cell = null;
+    }
+
+    public boolean moveTo(Coordinate coordinate){
+        if(cell == null) return false;
+        if(!canMoveTo(coordinate)) return false;
+
+        Cell destination = cell.getBoard().getCellAt(coordinate);
+
+        if(!destination.isEmpty())
+            destination.getPiece().remove();
+
+        cell.setPiece(null);
+        cell = destination;
+
+        place();
+
+        return true;
     }
 
     public void setCell(Cell cell) {
         this.cell = cell;
     }
 
+    public Type getType() {
+        return type;
+    }
+
+    public Cell getCell() {
+        return cell;
+    }
+
+    public Color getColor(){
+        return type.getColor();
+    }
+
+    public abstract Set<Coordinate> getNextMovements();
+
     @Override
     public String toString(){
-        String resultado="";
+        String resultado;
+
         if(cell==null){
             resultado = colorize(type.getShape(),type.getColor().getAttribute());
         }else{
@@ -48,12 +107,12 @@ public class Piece {
 
     public enum Type {
 
-        WHITE_KING("\u265A", Color.WHITE),
-        WHITE_QUEEN("\u265B", Color.WHITE),
-        WHITE_ROOK("\u265C", Color.WHITE),
-        WHITE_BISHOP("\u265D", Color.WHITE),
-        WHITE_KNIGHT("\u265E", Color.WHITE),
-        WHITE_PAWN("\u265F", Color.WHITE),
+        WHITE_KING("♚", Color.WHITE),
+        WHITE_QUEEN("♛", Color.WHITE),
+        WHITE_ROOK("♜", Color.WHITE),
+        WHITE_BISHOP("♝", Color.WHITE),
+        WHITE_KNIGHT("♞", Color.WHITE),
+        WHITE_PAWN("♟", Color.WHITE),
         BLACK_KING("♚", Color.BLACK),
         BLACK_QUEEN("♛", Color.BLACK),
         BLACK_ROOK("♜", Color.BLACK),

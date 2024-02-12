@@ -1,11 +1,12 @@
 package ieslavereda;
 
-public class Coordinate {
+public class Coordinate implements Comparable<Coordinate>{
+
     private char letter;
     private int number;
 
     public Coordinate(char letter, int number) {
-        this.letter = String.valueOf(letter).toUpperCase().charAt(0);
+        this.letter = Character.toUpperCase(letter);
         this.number = number;
     }
 
@@ -35,9 +36,22 @@ public class Coordinate {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj==null)
-            return false;
-        return (obj instanceof Coordinate)?((Coordinate) obj).letter==letter && ((Coordinate) obj).number==number:false;
+        if(obj == null) return false;
+        if(!(obj instanceof Coordinate)) return false;
+        Coordinate c = (Coordinate) obj;
+
+        return c.letter==letter && c.number==number;
+    }
+
+    @Override
+    public int hashCode() {
+        return number;
+    }
+
+    @Override
+    public int compareTo(Coordinate o) {
+        if(getLetter()!=o.getLetter()) return getLetter()-o.getLetter();
+        return getNumber()-o.getNumber();
     }
 
     @Override
