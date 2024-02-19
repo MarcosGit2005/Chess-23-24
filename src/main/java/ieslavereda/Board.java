@@ -18,6 +18,43 @@ public class Board {
                 cells.put(new Coordinate(col, row), new Cell(this, new Coordinate(col,row)));
 
     }
+    public void initialize(){
+        for (Cell cell:cells.values()){
+            Coordinate coordinate = cell.getCoordinate();
+
+            if (coordinate.getNumber()==1){
+                if (coordinate.getLetter()=='A' || coordinate.getLetter()=='H')
+                    cell.setPiece(new Rook(this,coordinate,Rook.Type.BLACK));
+                if (coordinate.getLetter()=='B' || coordinate.getLetter()=='G')
+                    cell.setPiece(new Knight(this,coordinate,Knight.Type.BLACK));
+                if (coordinate.getLetter()=='C' || coordinate.getLetter()=='F')
+                    cell.setPiece(new Bishop(this,coordinate,Bishop.Type.BLACK));
+                if (coordinate.getLetter()=='D')
+                    cell.setPiece(new Queen(this,coordinate,Queen.Type.BLACK));
+                if (coordinate.getLetter()=='E')
+                    cell.setPiece(new King(this,coordinate,King.Type.BLACK));
+            }
+
+            if (coordinate.getNumber()==2)
+                cell.setPiece(new Pawn(this,coordinate,Pawn.Type.BLACK));
+
+            if (coordinate.getNumber()==7)
+                cell.setPiece(new Pawn(this,coordinate,Pawn.Type.WHITE));
+
+            if (coordinate.getNumber()==8){
+                if (coordinate.getLetter()=='A' || coordinate.getLetter()=='H')
+                    cell.setPiece(new Rook(this,coordinate,Rook.Type.WHITE));
+                if (coordinate.getLetter()=='B' || coordinate.getLetter()=='G')
+                    cell.setPiece(new Knight(this,coordinate,Knight.Type.WHITE));
+                if (coordinate.getLetter()=='C' || coordinate.getLetter()=='F')
+                    cell.setPiece(new Bishop(this,coordinate,Bishop.Type.WHITE));
+                if (coordinate.getLetter()=='D')
+                    cell.setPiece(new Queen(this,coordinate,Queen.Type.WHITE));
+                if (coordinate.getLetter()=='E')
+                    cell.setPiece(new King(this,coordinate,King.Type.WHITE));
+            }
+        }
+    }
 
     public boolean contains(Coordinate c) {
         return cells.containsKey(c);
