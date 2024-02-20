@@ -63,7 +63,7 @@ public class MainChess {
                         clearConsole();
                         System.out.println(board);
 
-                        coordinateAux = Input.enterCoordinate("Select either another BLACK piece or a valid coordinate to attack/move (Example: C5): ");
+                        coordinateAux = Input.enterCoordinate("Select either another BLACK piece or a valid coordinate to attack/move (Example: C7): ");
 
                         if (!board.getCellAt(coordinateAux).isEmpty()) {
                             if (board.getCellAt(coordinateAux).getPiece().getColor() == Piece.Color.BLACK) {
