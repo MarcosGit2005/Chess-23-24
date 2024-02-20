@@ -13,7 +13,7 @@ public class Input {
 
         do {
             System.out.print(message);
-            chain = sc.next();
+            chain = sc.next().toUpperCase();
 
             letter = chain.charAt(0);
             num = chain.charAt(1)-48;

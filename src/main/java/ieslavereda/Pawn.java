@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class Pawn extends Piece {
     public Pawn(Board board, Coordinate position, Type type) {
-        super(type.getType(), board.getCellAt(position));
+        super(type.getType(), board!=null?board.getCellAt(position):null);
     }
 
     @Override

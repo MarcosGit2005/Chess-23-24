@@ -39,6 +39,7 @@ public abstract class Piece {
         if(cell!=null)
             cell.setPiece(null);
         cell = null;
+        MainChess.deletedPieceManagerList.addPiece(this);
     }
 
     public boolean moveTo(Coordinate coordinate){

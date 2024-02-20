@@ -6,7 +6,7 @@ import java.util.Set;
 public class Knight extends Piece {
 
     public Knight(Board board, Coordinate position, Type type) {
-        super(type.getType(), board.getCellAt(position));
+        super(type.getType(), board!=null?board.getCellAt(position):null);
     }
 
     public Set<Coordinate> getNextMovements() {
