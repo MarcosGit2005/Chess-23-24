@@ -47,7 +47,7 @@ public class MainChess {
                 playerOneName = Input.enterNombre().toUpperCase();
             } while (playerOneName.isEmpty());
 
-            System.out.print("Enter the name of player two (white): ");
+            System.out.print("Enter the name of player two (black): ");
             do {
                 playerTwoName = Input.enterNombre().toUpperCase();
             } while (playerTwoName.isEmpty());
@@ -90,12 +90,12 @@ public class MainChess {
             board.getCellAt(coordinateSelf).getPiece().moveTo(coordinateOther); // Move the piece
             board.removeHighLight();
 
-            if (whiteKing.check() && whiteKing.checkMate()){
+            if (!board.containsKing(whiteKing) || whiteKing.checkMate()){
                 endGame=true;
                 finalMessage = "CHECKMATE\n"+playerTwoName+" WINS (BLACK)";
             }
 
-            if (blackKing.check() && blackKing.checkMate()){
+            if (!board.containsKing(blackKing) || blackKing.checkMate()){
                 endGame=true;
                 finalMessage = "CHECKMATE\n"+playerOneName+"  WINS (WHITE)";
             }
@@ -140,12 +140,12 @@ public class MainChess {
                     }
                 }
 
-                if (whiteKing.check() && whiteKing.checkMate()){
+                if (!board.containsKing(whiteKing) || whiteKing.checkMate()){
                     endGame=true;
                     finalMessage = "CHECKMATE\n"+playerTwoName+" WINS (BLACK)";
                 }
 
-                if (blackKing.check() && blackKing.checkMate()){
+                if (!board.containsKing(blackKing) || blackKing.checkMate()){
                     endGame=true;
                     finalMessage = "CHECKMATE\n"+playerOneName+"  WINS (WHITE)";
                 }

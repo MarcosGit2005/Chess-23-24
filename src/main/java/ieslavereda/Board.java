@@ -106,6 +106,9 @@ public class Board implements Serializable{
                 .map(piece -> (King) piece).filter(king -> king.getColor()==pieceColor)
                 .findFirst().get();
     }
+    public boolean containsKing(King king){
+        return cells.values().stream().filter(c -> !c.isEmpty()).map(Cell::getPiece).collect(Collectors.toList()).contains(king);
+    }
     public Map<Coordinate, Cell> getCells(){
         return cells;
     }

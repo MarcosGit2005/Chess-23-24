@@ -63,6 +63,8 @@ public class King extends Piece {
                 .contains(getCell().getCoordinate());
     }
     public boolean checkMate(){ // PENDIENTE
+        if (!check())
+            return false;
         Board board = getCell().getBoard();
         for (Piece piece: getCell().getBoard().getCells().values().stream().filter(c -> !c.isEmpty()).map(Cell::getPiece)
                 .filter(p -> p.getColor()==getColor()).collect(Collectors.toList())){
