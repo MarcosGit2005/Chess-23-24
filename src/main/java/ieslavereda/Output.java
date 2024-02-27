@@ -7,7 +7,7 @@ import static com.diogonunes.jcolor.Ansi.colorize;
 public class Output {
     public static void OutputPlayerOne(Board board,String playerOneName){
         clearConsole();
-        System.out.println("----------------------TURN OF "+playerOneName+" (WHITE)----------------------"+(MainChess.saveGame?" GAME SAVED!":""));
+        System.out.println("----------------------TURN OF "+playerOneName+" (WHITE)----------------------");
         System.out.println(board+"\n");
 
         System.out.println(board.getRemainingPiecesList()+"\n");

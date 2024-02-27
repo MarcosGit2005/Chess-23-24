@@ -1,7 +1,8 @@
 package ieslavereda;
 
 import java.io.*;
-import java.math.BigDecimal;
+import com.diogonunes.jcolor.Attribute;
+import static com.diogonunes.jcolor.Ansi.colorize;
 
 public class MainChess {
     private static String playerOneName;
@@ -19,6 +20,7 @@ public class MainChess {
 
         saveGame = false;
         gameLoaded = false;
+        boolean firstTurn = true;
 
         fileName="";
 
@@ -56,6 +58,9 @@ public class MainChess {
             do {
 
                 Output.OutputPlayerOne(board,playerOneName);
+
+                if (!firstTurn && saveGame) // it doesn't save until the black player turn is finished
+                    System.out.println(colorize("GAME SAVED!",Attribute.TEXT_COLOR(255,255,255),Attribute.BACK_COLOR(50,50,255)));
 
                 coordinateSelf = Input.enterCoordinate("Select a WHITE piece (Example: A4): ");
 
@@ -133,6 +138,7 @@ public class MainChess {
                         e.printStackTrace();
                     }
                 }
+                firstTurn=false;
 
             }
         }
@@ -144,7 +150,7 @@ public class MainChess {
     public static void save() throws IOException {
         try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
                 new BufferedOutputStream(
-                        new FileOutputStream(fileName+".dat")
+                        new FileOutputStream("SAVED_GAMES/"+fileName+".dat")
                 )
         )){
 
@@ -159,7 +165,7 @@ public class MainChess {
         fileName = Input.enterString("Which file do you want to load (without the termination)?: ");
         try (ObjectInputStream objectInputStream = new ObjectInputStream(
                 new BufferedInputStream(
-                        new FileInputStream(fileName+".dat")
+                        new FileInputStream("SAVED_GAMES/"+fileName+".dat")
                 )
         )){
 
