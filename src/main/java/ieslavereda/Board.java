@@ -2,12 +2,13 @@ package ieslavereda;
 
 import com.diogonunes.jcolor.Attribute;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.diogonunes.jcolor.Ansi.colorize;
 
-public class Board {
+public class Board implements Serializable {
 
     private Map<Coordinate, Cell> cells;
 
@@ -104,6 +105,9 @@ public class Board {
                 .map(Cell::getPiece).filter(piece -> piece instanceof King)
                 .map(piece -> (King) piece).filter(king -> king.getColor()==pieceColor)
                 .findFirst().get();
+    }
+    public Map<Coordinate, Cell> getCells(){
+        return cells;
     }
 
     public void highLight(Collection<Coordinate> coordinates) {

@@ -1,50 +1,71 @@
 package ieslavereda;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.io.*;
+import java.math.BigDecimal;
 
 public class MainChess {
+    private static String playerOneName;
+    private static String playerTwoName;
+    private static Board board;
     public static DeletedPieceManagerList deletedPieceManagerList = new DeletedPieceManagerList();
+    // Save variables
+    public static Boolean gameLoaded;
+    public static Boolean saveGame;
+    private static String fileName;
     public static void main(String[] main) {
-        Board board = new Board();
-        board.initialize();
+        board = new Board();
         boolean endGame = false;
+        String finalMessage="";
+
+        saveGame = false;
+        gameLoaded = false;
+
+        fileName="";
 
         Coordinate coordinateAux;
         Coordinate coordinateSelf;
         Coordinate coordinateOther;
 
-        while (!endGame) {
-            // WHITE-TURN
-            System.out.println("----------------------WHITE PLAYER'S TURN----------------------");
+        try {
+            if (Input.enterOption("Do you want to load a saved game (Y/N)?: ")){
+                load();
+            } else if (Input.enterOption("Do you want to save the game (Y/N)?: ")){
+                fileName = Input.enterString("How do you want to name the file (without the termination)?: ");
+                saveGame=true;
+            }
+        } catch (Exception e){
+            System.err.println("The file does not exist or it's corrupted");
+        }
 
+        if (!gameLoaded){
+            board.initialize();
+
+            System.out.print("Enter the name of player one (white): ");
             do {
-                clearConsole();
-                System.out.println(board+"\n");
+                playerOneName = Input.enterNombre().toUpperCase();
+            } while (playerOneName.isEmpty());
 
-                System.out.println(board.getRemainingPiecesList()+"\n");
+            System.out.print("Enter the name of player two (white): ");
+            do {
+                playerTwoName = Input.enterNombre().toUpperCase();
+            } while (playerTwoName.isEmpty());
+        }
 
-                System.out.println(deletedPieceManagerList+"\n");
+        while (!endGame) {
+            // -------------------------- WHITE-TURN --------------------------------
+            do {
 
-                if (board.getKing(Piece.Color.WHITE).check())
-                    System.out.println("WHITE PLAYER IS ON CHECK");
+                Output.OutputPlayerOne(board,playerOneName);
 
                 coordinateSelf = Input.enterCoordinate("Select a WHITE piece (Example: A4): ");
+
             } while (board.getCellAt(coordinateSelf).isEmpty() || !(board.getCellAt(coordinateSelf).getPiece().getColor() == Piece.Color.WHITE));
 
             board.highLight(board.getCellAt(coordinateSelf).getPiece().getNextMovements());
 
             do {
-                clearConsole();
-                System.out.println(board+"\n");
 
-                System.out.println(board.getRemainingPiecesList()+"\n");
-
-                System.out.println(deletedPieceManagerList+"\n");
-
-                if (board.getKing(Piece.Color.WHITE).check())
-                    System.out.println("WHITE PLAYER IS ON CHECK");
+                Output.OutputPlayerOne(board,playerOneName);
 
                 coordinateAux = Input.enterCoordinate("Select either another WHITE piece or a valid coordinate to attack/move (Example: A4): ");
 
@@ -58,27 +79,22 @@ public class MainChess {
                 coordinateOther = coordinateAux;
             } while (!board.getCellAt(coordinateSelf).getPiece().getNextMovements().contains(coordinateAux));
 
-            if (!board.getCellAt(coordinateOther).isEmpty() && board.getCellAt(coordinateOther).getPiece().getType() == Piece.Type.BLACK_KING)
-                endGame = true;
-
             board.getCellAt(coordinateSelf).getPiece().moveTo(coordinateOther); // Move the piece
             board.removeHighLight();
 
+            King blackKing = board.getKing(Piece.Color.BLACK);
+            if (blackKing.check() && blackKing.checkMate()){
+                endGame=true;
+                finalMessage = "CHECKMATE\n"+playerOneName+"  WINS (WHITE)";
+            }
+
             if (!endGame) {
 
-                // BLACK-TURN
-                System.out.println("----------------------BLACK PLAYER'S TURN----------------------");
+                // --------------------------------- BLACK-TURN ---------------------------------
 
                 do {
-                    clearConsole();
-                    System.out.println(board+"\n");
 
-                    System.out.println(board.getRemainingPiecesList()+"\n");
-
-                    System.out.println(deletedPieceManagerList+"\n");
-
-                    if (board.getKing(Piece.Color.BLACK).check())
-                        System.out.println("BLACK PLAYER IS ON CHECK");
+                    Output.OutputPlayerTwo(board,playerTwoName);
 
                     coordinateSelf = Input.enterCoordinate("Select a BLACK piece (Example: B7): ");
                 } while (board.getCellAt(coordinateSelf).isEmpty() || !(board.getCellAt(coordinateSelf).getPiece().getColor() == Piece.Color.BLACK));
@@ -86,15 +102,8 @@ public class MainChess {
                 board.highLight(board.getCellAt(coordinateSelf).getPiece().getNextMovements());
 
                 do {
-                    clearConsole();
-                    System.out.println(board+"\n");
 
-                    System.out.println(board.getRemainingPiecesList()+"\n");
-
-                    System.out.println(deletedPieceManagerList+"\n");
-
-                    if (board.getKing(Piece.Color.BLACK).check())
-                        System.out.println("BLACK PLAYER IS ON CHECK");
+                    Output.OutputPlayerTwo(board,playerTwoName);
 
                     coordinateAux = Input.enterCoordinate("Select either another BLACK piece or a valid coordinate to attack/move (Example: C7): ");
 
@@ -108,17 +117,60 @@ public class MainChess {
                     coordinateOther = coordinateAux;
                 } while (!board.getCellAt(coordinateSelf).getPiece().getNextMovements().contains(coordinateAux));
 
-                if (!board.getCellAt(coordinateOther).isEmpty() && board.getCellAt(coordinateOther).getPiece().getType() == Piece.Type.WHITE_KING)
-                    endGame = true;
-
                 board.getCellAt(coordinateSelf).getPiece().moveTo(coordinateOther); // Move the piece
                 board.removeHighLight();
 
+                King whiteKing = board.getKing(Piece.Color.WHITE);
+                if (whiteKing.check() && whiteKing.checkMate()){
+                    endGame=true;
+                    finalMessage = "CHECKMATE\n"+playerTwoName+" WINS (BLACK)";
+                }
+
+                if (saveGame){
+                    try{
+                        save();
+                    } catch (IOException e){
+                        e.printStackTrace();
+                    }
+                }
+
             }
         }
+
+        System.out.println(board);
+        System.out.println(finalMessage);
+
     }
-    public static void clearConsole() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+    public static void save() throws IOException {
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+                new BufferedOutputStream(
+                        new FileOutputStream(fileName+".dat")
+                )
+        )){
+
+            objectOutputStream.writeObject(playerOneName);
+            objectOutputStream.writeObject(playerTwoName);
+            objectOutputStream.writeObject(board);
+            objectOutputStream.writeObject(deletedPieceManagerList);
+
+        }
+    }
+    public static void load() throws IOException, ClassNotFoundException{
+        fileName = Input.enterString("Which file do you want to load (without the termination)?: ");
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(
+                new BufferedInputStream(
+                        new FileInputStream(fileName+".dat")
+                )
+        )){
+
+            playerOneName = (String) objectInputStream.readObject();
+            playerTwoName = (String) objectInputStream.readObject();
+            board = (Board) objectInputStream.readObject();
+            deletedPieceManagerList = (DeletedPieceManagerList) objectInputStream.readObject();
+
+            gameLoaded = true;
+            saveGame = true;
+
+        }
     }
 }

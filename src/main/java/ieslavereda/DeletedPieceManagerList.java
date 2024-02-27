@@ -1,5 +1,6 @@
 package ieslavereda;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.stream.Collectors;
 import com.diogonunes.jcolor.Attribute;
 import static com.diogonunes.jcolor.Ansi.colorize;
 
-public class DeletedPieceManagerList{
+public class DeletedPieceManagerList implements Serializable {
 
     List<Piece> pieceList;
 

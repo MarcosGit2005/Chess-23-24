@@ -1,6 +1,8 @@
 package ieslavereda;
 
-public class Coordinate implements Comparable<Coordinate>{
+import java.io.Serializable;
+
+public class Coordinate implements Comparable<Coordinate>, Serializable {
 
     private char letter;
     private int number;

@@ -2,6 +2,7 @@ package ieslavereda;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class King extends Piece {
 
@@ -60,6 +61,17 @@ public class King extends Piece {
         return getCell().getBoard()
                 .getNextMovements(getColor()==Color.BLACK?Color.WHITE:Color.BLACK)
                 .contains(getCell().getCoordinate());
+    }
+    public boolean checkMate(){ // PENDIENTE
+        for (Piece piece: getCell().getBoard().getCells().values().stream().filter(c -> !c.isEmpty()).map(Cell::getPiece)
+                .filter(p -> p.getColor().equals(getColor())).collect(Collectors.toList())){
+            for (Coordinate coordinate: piece.getNextMovements()){
+
+            }
+        }
+        return getCell().getBoard()
+                .getNextMovements(getColor()==Color.BLACK?Color.WHITE:Color.BLACK)
+                .containsAll(getNextMovements());
     }
 
     public enum Type {

@@ -2,9 +2,11 @@ package ieslavereda;
 
 import com.diogonunes.jcolor.Attribute;
 
+import java.io.Serializable;
+
 import static com.diogonunes.jcolor.Ansi.colorize;
 
-public class Cell {
+public class Cell implements Serializable {
 
     private Piece piece;
     private Board board;
