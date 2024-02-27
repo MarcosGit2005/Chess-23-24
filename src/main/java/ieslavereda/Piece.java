@@ -3,6 +3,8 @@ package ieslavereda;
 import com.diogonunes.jcolor.Attribute;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import static com.diogonunes.jcolor.Ansi.colorize;
@@ -59,6 +61,14 @@ public abstract class Piece implements Serializable {
 
         return true;
     }
+    public void getBackTo(Coordinate coordinate){ // Only to get back in the checkmate function
+        Cell destination = cell.getBoard().getCellAt(coordinate);
+
+        cell.setPiece(null);
+        cell = destination;
+
+        place();
+    }
 
     public void setCell(Cell cell) {
         this.cell = cell;
@@ -77,7 +87,6 @@ public abstract class Piece implements Serializable {
     }
 
     public abstract Set<Coordinate> getNextMovements();
-
     @Override
     public String toString(){
         String resultado;

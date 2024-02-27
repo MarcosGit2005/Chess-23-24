@@ -3,10 +3,12 @@ package ieslavereda;
 import com.diogonunes.jcolor.Attribute;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.diogonunes.jcolor.Ansi.colorize;
 
-public class Cell implements Serializable {
+public class Cell implements Serializable{
 
     private Piece piece;
     private Board board;

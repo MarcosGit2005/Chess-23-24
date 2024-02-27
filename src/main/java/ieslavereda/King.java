@@ -63,15 +63,15 @@ public class King extends Piece {
                 .contains(getCell().getCoordinate());
     }
     public boolean checkMate(){ // PENDIENTE
+        Board board = getCell().getBoard();
         for (Piece piece: getCell().getBoard().getCells().values().stream().filter(c -> !c.isEmpty()).map(Cell::getPiece)
-                .filter(p -> p.getColor().equals(getColor())).collect(Collectors.toList())){
+                .filter(p -> p.getColor()==getColor()).collect(Collectors.toList())){
             for (Coordinate coordinate: piece.getNextMovements()){
-
+                if (!board.checkIfCheck(piece,coordinate))
+                    return false;
             }
         }
-        return getCell().getBoard()
-                .getNextMovements(getColor()==Color.BLACK?Color.WHITE:Color.BLACK)
-                .containsAll(getNextMovements());
+        return true;
     }
 
     public enum Type {

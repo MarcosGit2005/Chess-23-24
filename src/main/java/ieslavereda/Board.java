@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import static com.diogonunes.jcolor.Ansi.colorize;
 
-public class Board implements Serializable {
+public class Board implements Serializable{
 
     private Map<Coordinate, Cell> cells;
 
@@ -109,7 +109,28 @@ public class Board implements Serializable {
     public Map<Coordinate, Cell> getCells(){
         return cells;
     }
+    public boolean checkIfCheck(Piece piece, Coordinate coordinateDestination){
+        boolean check = false;
+        Coordinate coordinateBefore = piece.getCell().getCoordinate();
 
+        if (getCellAt(coordinateDestination).isEmpty()){
+            piece.moveTo(coordinateDestination);
+            check = getKing(piece.getColor()).check();
+            piece.getBackTo(coordinateBefore);
+        } else {
+            piece.moveTo(coordinateDestination);
+            check = getKing(piece.getColor()).check();
+            piece.getBackTo(coordinateBefore);
+
+            Piece pieceDeleted = MainChess.deletedPieceManagerList.removeLast();
+            pieceDeleted.setCell(getCellAt(coordinateDestination));
+            pieceDeleted.place();
+        }
+
+        System.out.println(toString()+"\n");
+
+        return check;
+    }
     public void highLight(Collection<Coordinate> coordinates) {
         for (Coordinate c : coordinates)
             getCellAt(c).highlight();

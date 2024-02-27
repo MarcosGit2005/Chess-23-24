@@ -53,6 +53,9 @@ public class MainChess {
             } while (playerTwoName.isEmpty());
         }
 
+        King whiteKing = board.getKing(Piece.Color.WHITE);
+        King blackKing = board.getKing(Piece.Color.BLACK);
+
         while (!endGame) {
             // -------------------------- WHITE-TURN --------------------------------
             do {
@@ -87,7 +90,11 @@ public class MainChess {
             board.getCellAt(coordinateSelf).getPiece().moveTo(coordinateOther); // Move the piece
             board.removeHighLight();
 
-            King blackKing = board.getKing(Piece.Color.BLACK);
+            if (whiteKing.check() && whiteKing.checkMate()){
+                endGame=true;
+                finalMessage = "CHECKMATE\n"+playerTwoName+" WINS (BLACK)";
+            }
+
             if (blackKing.check() && blackKing.checkMate()){
                 endGame=true;
                 finalMessage = "CHECKMATE\n"+playerOneName+"  WINS (WHITE)";
@@ -125,12 +132,6 @@ public class MainChess {
                 board.getCellAt(coordinateSelf).getPiece().moveTo(coordinateOther); // Move the piece
                 board.removeHighLight();
 
-                King whiteKing = board.getKing(Piece.Color.WHITE);
-                if (whiteKing.check() && whiteKing.checkMate()){
-                    endGame=true;
-                    finalMessage = "CHECKMATE\n"+playerTwoName+" WINS (BLACK)";
-                }
-
                 if (saveGame){
                     try{
                         save();
@@ -138,6 +139,17 @@ public class MainChess {
                         e.printStackTrace();
                     }
                 }
+
+                if (whiteKing.check() && whiteKing.checkMate()){
+                    endGame=true;
+                    finalMessage = "CHECKMATE\n"+playerTwoName+" WINS (BLACK)";
+                }
+
+                if (blackKing.check() && blackKing.checkMate()){
+                    endGame=true;
+                    finalMessage = "CHECKMATE\n"+playerOneName+"  WINS (WHITE)";
+                }
+
                 firstTurn=false;
 
             }
