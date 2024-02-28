@@ -8,7 +8,7 @@ public class Output {
     public static void OutputPlayerOne(Board board,String playerOneName){
         clearConsole();
         System.out.println("----------------------TURN OF "+playerOneName+" (WHITE)----------------------");
-        System.out.println(board+"\n");
+        System.out.println(board.getWhiteBoard()+"\n");
 
         System.out.println(board.getDeletedPieceManagerList().getRemainingPiecesList()+"\n");
 
@@ -20,7 +20,7 @@ public class Output {
     public static void OutputPlayerTwo(Board board,String playerTwoName){
         clearConsole();
         System.out.println("----------------------TURN OF "+playerTwoName+" (BLACK)----------------------");
-        System.out.println(board+"\n");
+        System.out.println(board.getBlackBoard()+"\n");
 
         System.out.println(board.getDeletedPieceManagerList().getRemainingPiecesList()+"\n");
 

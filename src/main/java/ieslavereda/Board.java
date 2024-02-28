@@ -124,18 +124,46 @@ public class Board implements Serializable{
     public DeletedPieceManagerList getDeletedPieceManagerList(){
         return deletedPieceManagerList;
     }
+    private String getBlackBoardCells(){
+        String chain="";
+        for (int row = 8; row >= 1; row--) {
+            chain += " " + row + " ";
+            for (char col = 'H'; col >= 'A'; col--)
+                chain += cells.get(new Coordinate(col, row));
+
+            chain += " " + row + "\n";
+        }
+        return chain;
+    }
+    public String getBlackBoard(){
+        String chain = "    H  G  F  E  D  C  B  A\n";
+
+        chain += getBlackBoardCells();
+
+        chain += "    H  G  F  E  D  C  B  A";
+        return chain;
+    }
+    public String getWhiteBoard(){
+        return toString();
+    }
+    private String getWhiteBoardCells(){
+        String chain="";
+        for (int row = 1; row <= 8; row++) {
+            chain += " " + row + " ";
+            for (char col = 'A'; col <= 'H'; col++)
+                chain += cells.get(new Coordinate(col, row));
+
+            chain += " " + row + "\n";
+        }
+        return chain;
+    }
     @Override
     public String toString() {
-        String aux = "    A  B  C  D  E  F  G  H\n";
+        String chain = "    A  B  C  D  E  F  G  H\n";
 
-        for (int row = 1; row <= 8; row++) {
-            aux += " " + row + " ";
-            for (char col = 'A'; col <= 'H'; col++)
-                aux += cells.get(new Coordinate(col, row));
+        chain += getWhiteBoardCells();
 
-            aux += " " + row + "\n";
-        }
-        aux += "    A  B  C  D  E  F  G  H";
-        return aux;
+        chain += "    A  B  C  D  E  F  G  H";
+        return chain;
     }
 }

@@ -34,7 +34,7 @@ public class MainChess {
                 saveGame=true;
             }
         } catch (Exception e){
-            System.err.println(colorize("The file does not exists or it's corrupted",Attribute.TEXT_COLOR(255,0,0)));
+            System.out.println(colorize("The file does not exists or it's corrupted",Attribute.TEXT_COLOR(255,0,0)));
         }
 
         if (!gameLoaded){
@@ -101,7 +101,7 @@ public class MainChess {
                     try{
                         save();
                     } catch (IOException e){
-                        e.printStackTrace();
+                        System.out.println(colorize("The directory where the games are saved has been deleted (SAVED_GAMES)",Attribute.TEXT_COLOR(255,0,0)));
                     }
                 }
             }
@@ -151,7 +151,7 @@ public class MainChess {
                     try{
                         save();
                     } catch (IOException e){
-                        e.printStackTrace();
+                        System.out.println(colorize("The directory where the games are saved has been deleted (SAVED_GAMES)",Attribute.TEXT_COLOR(255,0,0)));
                     }
                 }
             }
