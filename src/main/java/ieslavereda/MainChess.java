@@ -22,9 +22,11 @@ public class MainChess {
 
         fileName="";
 
-        Coordinate coordinateAux;
-        Coordinate coordinateSelf;
-        Coordinate coordinateOther;
+        boolean correctCoordinate = true;
+
+        Coordinate coordinateAux=new Coordinate('z',9);
+        Coordinate coordinateSelf=new Coordinate('z',9);
+        Coordinate coordinateOther=new Coordinate('z',9);
 
         try {
             if (Input.enterOption("Do you want to load a saved game (Y/N)?: ")){
@@ -63,28 +65,44 @@ public class MainChess {
                 do {
 
                     Output.OutputPlayerOne(board,playerOneName);
+                    if (!correctCoordinate)
+                        System.err.println("Enter a valid coordinate");
 
-                    coordinateSelf = Input.enterCoordinate("Select a WHITE piece (Example: A4): ");
+                    try { // the exception is only in case that the coordinate doesn't exist in the board
+                        coordinateSelf = Input.enterCoordinate("Select a WHITE piece (Example: A4): ");
+                    } catch (Exception e){
+                        correctCoordinate=false;
+                    }
 
-                } while (board.getCellAt(coordinateSelf).isEmpty() || !(board.getCellAt(coordinateSelf).getPiece().getColor() == Piece.Color.WHITE));
+                } while (!board.contains(coordinateSelf) || board.getCellAt(coordinateSelf).isEmpty() || !(board.getCellAt(coordinateSelf).getPiece().getColor() == Piece.Color.WHITE));
+                correctCoordinate=true; // gets back to its default value
 
                 board.highLight(board.getCellAt(coordinateSelf).getPiece().getNextMovements());
 
                 do {
 
                     Output.OutputPlayerOne(board,playerOneName);
+                    if (!correctCoordinate)
+                        System.err.println("Enter a valid coordinate");
 
-                    coordinateAux = Input.enterCoordinate("Select either another WHITE piece or a valid coordinate to attack/move (Example: A4): ");
+                    try {
+                        coordinateAux = Input.enterCoordinate("Select either another WHITE piece or a valid coordinate to attack/move (Example: A4): ");
+                    } catch (Exception e){
+                        correctCoordinate=false;
+                        coordinateAux=null;
+                    }
 
-                    if (!board.getCellAt(coordinateAux).isEmpty()) {
+                    if (board.contains(coordinateAux) && !board.getCellAt(coordinateAux).isEmpty()) {
                         if (board.getCellAt(coordinateAux).getPiece().getColor() == Piece.Color.WHITE) {
                             coordinateSelf = coordinateAux;
                             board.removeHighLight();
                             board.highLight(board.getCellAt(coordinateSelf).getPiece().getNextMovements());
+                            correctCoordinate=true; // because another piece was selected
                         }
                     }
                     coordinateOther = coordinateAux;
                 } while (!board.getCellAt(coordinateSelf).getPiece().getNextMovements().contains(coordinateAux));
+                correctCoordinate=true;
 
                 board.getCellAt(coordinateSelf).getPiece().moveTo(coordinateOther); // Move the piece
                 board.removeHighLight();
@@ -113,28 +131,43 @@ public class MainChess {
                 do {
 
                     Output.OutputPlayerTwo(board,playerTwoName);
+                    if (!correctCoordinate)
+                        System.err.println("Enter a valid coordinate");
+                    try {
+                        coordinateSelf = Input.enterCoordinate("Select a BLACK piece (Example: B7): ");
+                    } catch (Exception e){
+                        correctCoordinate=false;
+                    }
 
-                    coordinateSelf = Input.enterCoordinate("Select a BLACK piece (Example: B7): ");
-
-                } while (board.getCellAt(coordinateSelf).isEmpty() || !(board.getCellAt(coordinateSelf).getPiece().getColor() == Piece.Color.BLACK));
+                } while (!board.contains(coordinateSelf) || board.getCellAt(coordinateSelf).isEmpty() || !(board.getCellAt(coordinateSelf).getPiece().getColor() == Piece.Color.BLACK));
+                correctCoordinate=true;
 
                 board.highLight(board.getCellAt(coordinateSelf).getPiece().getNextMovements());
 
                 do {
 
                     Output.OutputPlayerTwo(board,playerTwoName);
+                    if (!correctCoordinate)
+                        System.err.println("Enter a valid coordinate");
 
-                    coordinateAux = Input.enterCoordinate("Select either another BLACK piece or a valid coordinate to attack/move (Example: C7): ");
+                    try {
+                        coordinateAux = Input.enterCoordinate("Select either another BLACK piece or a valid coordinate to attack/move (Example: A4): ");
+                    } catch (Exception e){
+                        correctCoordinate=false;
+                        coordinateAux=null;
+                    }
 
-                    if (!board.getCellAt(coordinateAux).isEmpty()) {
+                    if (board.contains(coordinateAux) && !board.getCellAt(coordinateAux).isEmpty()) {
                         if (board.getCellAt(coordinateAux).getPiece().getColor() == Piece.Color.BLACK) {
                             coordinateSelf = coordinateAux;
                             board.removeHighLight();
                             board.highLight(board.getCellAt(coordinateSelf).getPiece().getNextMovements());
+                            correctCoordinate=true; // because another piece was selected
                         }
                     }
                     coordinateOther = coordinateAux;
                 } while (!board.getCellAt(coordinateSelf).getPiece().getNextMovements().contains(coordinateAux));
+                correctCoordinate=true;
 
                 board.getCellAt(coordinateSelf).getPiece().moveTo(coordinateOther); // Move the piece
                 board.removeHighLight();

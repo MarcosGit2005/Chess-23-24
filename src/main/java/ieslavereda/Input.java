@@ -4,22 +4,23 @@ import java.util.Scanner;
 
 public class Input {
     private static Scanner sc = new Scanner(System.in);
-    public static Coordinate enterCoordinate(String message){
+    public static Coordinate enterCoordinate(String message) throws Exception{
 
         int num=-1;
         char letter='Z';
 
         String chain;
 
-        do {
-            System.out.print(message);
-            chain = sc.next().toUpperCase();
+        System.out.print(message);
+        chain = sc.next().toUpperCase();
 
-            if (chain.length()>1){
-                letter = chain.charAt(0);
-                num = chain.charAt(1)-48;
-            }
-        } while (!letterCorrect(letter) || !numberCorrect(num));
+        if (chain.length()==2){
+            letter = chain.charAt(0);
+            num = chain.charAt(1)-48;
+        }
+
+        if (chain.length()!=2 || !letterCorrect(letter) || !numberCorrect(num))
+            throw new Exception();
 
         return new Coordinate(letter,num);
     }

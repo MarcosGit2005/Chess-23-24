@@ -6,8 +6,6 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.diogonunes.jcolor.Ansi.colorize;
-
 public class Board implements Serializable{
 
     private Map<Coordinate, Cell> cells;
