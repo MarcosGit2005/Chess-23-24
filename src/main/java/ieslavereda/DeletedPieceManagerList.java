@@ -30,8 +30,39 @@ public class DeletedPieceManagerList implements Serializable {
         }
         return cont;
     }
-    @Override
-    public String toString(){
+    public int countRemaining(Piece.Type type){
+        if (type == Piece.Type.BLACK_PAWN || type == Piece.Type.WHITE_PAWN)
+            return 8 - count(type== Piece.Type.BLACK_PAWN? Piece.Type.BLACK_PAWN: Piece.Type.WHITE_PAWN);
+        else if (type == Piece.Type.BLACK_KNIGHT || type == Piece.Type.WHITE_KNIGHT)
+            return 2 - count(type== Piece.Type.BLACK_KNIGHT? Piece.Type.BLACK_KNIGHT: Piece.Type.WHITE_KNIGHT);
+        else if (type == Piece.Type.BLACK_BISHOP || type == Piece.Type.WHITE_BISHOP)
+            return 2 - count(type== Piece.Type.BLACK_BISHOP? Piece.Type.BLACK_BISHOP: Piece.Type.WHITE_BISHOP);
+        else if (type == Piece.Type.BLACK_ROOK || type == Piece.Type.WHITE_ROOK)
+            return 2 - count(type== Piece.Type.BLACK_ROOK? Piece.Type.BLACK_ROOK: Piece.Type.WHITE_ROOK);
+        else if (type == Piece.Type.BLACK_QUEEN || type == Piece.Type.WHITE_QUEEN)
+            return 1 - count(type== Piece.Type.BLACK_QUEEN? Piece.Type.BLACK_QUEEN: Piece.Type.WHITE_QUEEN);
+        else if (type == Piece.Type.BLACK_KING || type == Piece.Type.WHITE_KING)
+            return 1 - count(type== Piece.Type.BLACK_KING? Piece.Type.BLACK_KING: Piece.Type.WHITE_KING);
+        return 0;
+    }
+    public String getRemainingPiecesList(){
+        Set<Piece> setPieces = getUpperPartFromList();
+
+        String remainingPieces = setPieces.stream()
+                .map(p -> colorize(" " + p.toString(), Attribute.BACK_COLOR(100,100,100)) + colorize(" ",Attribute.BACK_COLOR(100,100,100)))
+                .collect(Collectors.joining()) + "\n"; // Upper part of the remaining pieces list
+
+        for (Piece piece:setPieces){
+            remainingPieces += colorize(" " + countRemaining(piece.getType()),Attribute.BACK_COLOR(180,180,180),Attribute.TEXT_COLOR(100,100,100)) +
+                    colorize(" ",Attribute.BACK_COLOR(180,180,180));
+        }
+
+        return "REMAINING PIECES:\n" + remainingPieces;
+    }
+    public String getDeletedPiecesList(){
+        return toString();
+    }
+    private Set<Piece> getUpperPartFromList(){
         Set<Piece> setPieces = new LinkedHashSet<>();
         setPieces.add(new King(null,null,King.Type.WHITE));
         setPieces.add(new Queen(null,null,Queen.Type.WHITE));
@@ -45,6 +76,12 @@ public class DeletedPieceManagerList implements Serializable {
         setPieces.add(new Bishop(null,null,Bishop.Type.BLACK));
         setPieces.add(new Knight(null,null,Knight.Type.BLACK));
         setPieces.add(new Pawn(null,null,Pawn.Type.BLACK));
+
+        return setPieces;
+    }
+    @Override
+    public String toString(){
+        Set<Piece> setPieces = getUpperPartFromList();
 
         String deletedPieces = setPieces.stream()
                 .map(p -> colorize(" " + p.toString(),Attribute.BACK_COLOR(100,100,100)) + colorize(" ",Attribute.BACK_COLOR(100,100,100)))

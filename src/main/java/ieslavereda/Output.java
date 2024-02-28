@@ -10,9 +10,9 @@ public class Output {
         System.out.println("----------------------TURN OF "+playerOneName+" (WHITE)----------------------");
         System.out.println(board+"\n");
 
-        System.out.println(board.getRemainingPiecesList()+"\n");
+        System.out.println(board.getDeletedPieceManagerList().getRemainingPiecesList()+"\n");
 
-        System.out.println(MainChess.deletedPieceManagerList+"\n");
+        System.out.println(board.getDeletedPieceManagerList().getDeletedPiecesList()+"\n");
 
         if (board.getKing(Piece.Color.WHITE).check())
             System.out.println(colorize("CHECK", Attribute.TEXT_COLOR(255,255,255),Attribute.BACK_COLOR(255,0,0)));
@@ -22,9 +22,9 @@ public class Output {
         System.out.println("----------------------TURN OF "+playerTwoName+" (BLACK)----------------------");
         System.out.println(board+"\n");
 
-        System.out.println(board.getRemainingPiecesList()+"\n");
+        System.out.println(board.getDeletedPieceManagerList().getRemainingPiecesList()+"\n");
 
-        System.out.println(MainChess.deletedPieceManagerList+"\n");
+        System.out.println(board.getDeletedPieceManagerList().getDeletedPiecesList()+"\n");
 
         if (board.getKing(Piece.Color.BLACK).check())
             System.out.println(colorize("CHECK",Attribute.TEXT_COLOR(255,255,255),Attribute.BACK_COLOR(255,0,0)));

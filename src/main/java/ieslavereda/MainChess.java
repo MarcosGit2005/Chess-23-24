@@ -8,7 +8,6 @@ public class MainChess {
     private static String playerOneName;
     private static String playerTwoName;
     private static Board board;
-    public static DeletedPieceManagerList deletedPieceManagerList = new DeletedPieceManagerList();
     // Save variables
     public static Boolean gameLoaded;
     public static Boolean saveGame;
@@ -36,7 +35,7 @@ public class MainChess {
                 saveGame=true;
             }
         } catch (Exception e){
-            System.err.println("The file does not exist or it's corrupted");
+            System.err.println(colorize("The file does not exists or it's corrupted",Attribute.TEXT_COLOR(255,0,0)));
         }
 
         if (!gameLoaded){
@@ -169,7 +168,6 @@ public class MainChess {
             objectOutputStream.writeObject(playerOneName);
             objectOutputStream.writeObject(playerTwoName);
             objectOutputStream.writeObject(board);
-            objectOutputStream.writeObject(deletedPieceManagerList);
 
         }
     }
@@ -184,7 +182,6 @@ public class MainChess {
             playerOneName = (String) objectInputStream.readObject();
             playerTwoName = (String) objectInputStream.readObject();
             board = (Board) objectInputStream.readObject();
-            deletedPieceManagerList = (DeletedPieceManagerList) objectInputStream.readObject();
 
             gameLoaded = true;
             saveGame = true;

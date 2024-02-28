@@ -41,8 +41,8 @@ public abstract class Piece implements Serializable {
     public void remove(){
         if(cell!=null)
             cell.setPiece(null);
+        getCell().getBoard().getDeletedPieceManagerList().addPiece(this); // this stem must go before than I set the cell as null
         cell = null;
-        MainChess.deletedPieceManagerList.addPiece(this);
     }
 
     public boolean moveTo(Coordinate coordinate){

@@ -11,8 +11,10 @@ import static com.diogonunes.jcolor.Ansi.colorize;
 public class Board implements Serializable{
 
     private Map<Coordinate, Cell> cells;
+    private DeletedPieceManagerList deletedPieceManagerList;
+    public Board(){
+        deletedPieceManagerList = new DeletedPieceManagerList();
 
-    public Board() {
         cells = new HashMap<>();
 
         for (int row = 1; row <= 8; row++)
@@ -57,35 +59,6 @@ public class Board implements Serializable{
             }
         }
     }
-    public String getRemainingPiecesList(){
-        Set<Piece> setPieces = new LinkedHashSet<>();
-        setPieces.add(new King(null,null,King.Type.WHITE));
-        setPieces.add(new Queen(null,null,Queen.Type.WHITE));
-        setPieces.add(new Rook(null,null,Rook.Type.WHITE));
-        setPieces.add(new Bishop(null,null,Bishop.Type.WHITE));
-        setPieces.add(new Knight(null,null,Knight.Type.WHITE));
-        setPieces.add(new Pawn(null,null,Pawn.Type.WHITE));
-        setPieces.add(new King(null,null,King.Type.BLACK));
-        setPieces.add(new Queen(null,null,Queen.Type.BLACK));
-        setPieces.add(new Rook(null,null,Rook.Type.BLACK));
-        setPieces.add(new Bishop(null,null,Bishop.Type.BLACK));
-        setPieces.add(new Knight(null,null,Knight.Type.BLACK));
-        setPieces.add(new Pawn(null,null,Pawn.Type.BLACK));
-
-        String remainingPieces = setPieces.stream()
-                .map(p -> colorize(" " + p.toString(), Attribute.BACK_COLOR(100,100,100)) + colorize(" ",Attribute.BACK_COLOR(100,100,100)))
-                .collect(Collectors.joining()) + "\n"; // Upper part of the remaining pieces list
-
-        for (Piece piece:setPieces){
-            remainingPieces += colorize(
-                    " " + cells.values().stream().filter(c -> !c.isEmpty()).map(Cell::getPiece)
-                            .filter(p -> p.getType()==piece.getType())
-                            .count(),Attribute.BACK_COLOR(180,180,180),Attribute.TEXT_COLOR(100,100,100)
-            ) + colorize(" ",Attribute.BACK_COLOR(180,180,180));
-        }
-
-        return "REMAINING PIECES:\n" + remainingPieces;
-    }
     public boolean contains(Coordinate c) {
         return cells.containsKey(c);
     }
@@ -125,13 +98,10 @@ public class Board implements Serializable{
             check = getKing(piece.getColor()).check();
             piece.getBackTo(coordinateBefore);
 
-            Piece pieceDeleted = MainChess.deletedPieceManagerList.removeLast();
+            Piece pieceDeleted = deletedPieceManagerList.removeLast();
             pieceDeleted.setCell(getCellAt(coordinateDestination));
             pieceDeleted.place();
         }
-
-        System.out.println(toString()+"\n");
-
         return check;
     }
     public void highLight(Collection<Coordinate> coordinates) {
@@ -142,7 +112,9 @@ public class Board implements Serializable{
     public void removeHighLight() {
         cells.values().stream().forEach(cell -> cell.removeHighLight());
     }
-
+    public DeletedPieceManagerList getDeletedPieceManagerList(){
+        return deletedPieceManagerList;
+    }
     @Override
     public String toString() {
         String aux = "    A  B  C  D  E  F  G  H\n";
