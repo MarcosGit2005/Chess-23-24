@@ -32,18 +32,18 @@ public class DeletedPieceManagerList implements Serializable {
     }
     public int countRemaining(Piece.Type type){
         if (type == Piece.Type.BLACK_PAWN || type == Piece.Type.WHITE_PAWN)
-            return 8 - count(type== Piece.Type.BLACK_PAWN? Piece.Type.BLACK_PAWN: Piece.Type.WHITE_PAWN);
+            return 8 - count(type);
         else if (type == Piece.Type.BLACK_KNIGHT || type == Piece.Type.WHITE_KNIGHT)
-            return 2 - count(type== Piece.Type.BLACK_KNIGHT? Piece.Type.BLACK_KNIGHT: Piece.Type.WHITE_KNIGHT);
+            return 2 - count(type);
         else if (type == Piece.Type.BLACK_BISHOP || type == Piece.Type.WHITE_BISHOP)
-            return 2 - count(type== Piece.Type.BLACK_BISHOP? Piece.Type.BLACK_BISHOP: Piece.Type.WHITE_BISHOP);
+            return 2 - count(type);
         else if (type == Piece.Type.BLACK_ROOK || type == Piece.Type.WHITE_ROOK)
-            return 2 - count(type== Piece.Type.BLACK_ROOK? Piece.Type.BLACK_ROOK: Piece.Type.WHITE_ROOK);
+            return 2 - count(type);
         else if (type == Piece.Type.BLACK_QUEEN || type == Piece.Type.WHITE_QUEEN)
-            return 1 - count(type== Piece.Type.BLACK_QUEEN? Piece.Type.BLACK_QUEEN: Piece.Type.WHITE_QUEEN);
-        else if (type == Piece.Type.BLACK_KING || type == Piece.Type.WHITE_KING)
-            return 1 - count(type== Piece.Type.BLACK_KING? Piece.Type.BLACK_KING: Piece.Type.WHITE_KING);
-        return 0;
+            return 1 - count(type);
+        else // Kings
+            return 1 - count(type);
+
     }
     public String getRemainingPiecesList(){
         Set<Piece> setPieces = getUpperPartFromList();

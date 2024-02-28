@@ -12,7 +12,10 @@ public class Board implements Serializable{
 
     private Map<Coordinate, Cell> cells;
     private DeletedPieceManagerList deletedPieceManagerList;
+    private Boolean whiteTurn;
     public Board(){
+        whiteTurn = true;
+
         deletedPieceManagerList = new DeletedPieceManagerList();
 
         cells = new HashMap<>();
@@ -58,6 +61,12 @@ public class Board implements Serializable{
                     cell.setPiece(new King(this,coordinate,King.Type.WHITE));
             }
         }
+    }
+    public void changeTurn(){
+        whiteTurn = !whiteTurn;
+    }
+    public boolean isWhiteTurn(){
+        return whiteTurn;
     }
     public boolean contains(Coordinate c) {
         return cells.containsKey(c);

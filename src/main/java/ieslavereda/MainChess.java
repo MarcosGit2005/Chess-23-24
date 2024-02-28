@@ -19,7 +19,6 @@ public class MainChess {
 
         saveGame = false;
         gameLoaded = false;
-        boolean firstTurn = true;
 
         fileName="";
 
@@ -56,50 +55,58 @@ public class MainChess {
         King blackKing = board.getKing(Piece.Color.BLACK);
 
         while (!endGame) {
-            // -------------------------- WHITE-TURN --------------------------------
-            do {
 
-                Output.OutputPlayerOne(board,playerOneName);
+            if (board.isWhiteTurn()){ // with this I can save the last turn
 
-                if (!firstTurn && saveGame) // it doesn't save until the black player turn is finished
-                    System.out.println(colorize("GAME SAVED!",Attribute.TEXT_COLOR(255,255,255),Attribute.BACK_COLOR(50,50,255)));
+                // -------------------------- WHITE-TURN --------------------------------
 
-                coordinateSelf = Input.enterCoordinate("Select a WHITE piece (Example: A4): ");
+                do {
 
-            } while (board.getCellAt(coordinateSelf).isEmpty() || !(board.getCellAt(coordinateSelf).getPiece().getColor() == Piece.Color.WHITE));
+                    Output.OutputPlayerOne(board,playerOneName);
 
-            board.highLight(board.getCellAt(coordinateSelf).getPiece().getNextMovements());
+                    coordinateSelf = Input.enterCoordinate("Select a WHITE piece (Example: A4): ");
 
-            do {
+                } while (board.getCellAt(coordinateSelf).isEmpty() || !(board.getCellAt(coordinateSelf).getPiece().getColor() == Piece.Color.WHITE));
 
-                Output.OutputPlayerOne(board,playerOneName);
+                board.highLight(board.getCellAt(coordinateSelf).getPiece().getNextMovements());
 
-                coordinateAux = Input.enterCoordinate("Select either another WHITE piece or a valid coordinate to attack/move (Example: A4): ");
+                do {
 
-                if (!board.getCellAt(coordinateAux).isEmpty()) {
-                    if (board.getCellAt(coordinateAux).getPiece().getColor() == Piece.Color.WHITE) {
-                        coordinateSelf = coordinateAux;
-                        board.removeHighLight();
-                        board.highLight(board.getCellAt(coordinateSelf).getPiece().getNextMovements());
+                    Output.OutputPlayerOne(board,playerOneName);
+
+                    coordinateAux = Input.enterCoordinate("Select either another WHITE piece or a valid coordinate to attack/move (Example: A4): ");
+
+                    if (!board.getCellAt(coordinateAux).isEmpty()) {
+                        if (board.getCellAt(coordinateAux).getPiece().getColor() == Piece.Color.WHITE) {
+                            coordinateSelf = coordinateAux;
+                            board.removeHighLight();
+                            board.highLight(board.getCellAt(coordinateSelf).getPiece().getNextMovements());
+                        }
+                    }
+                    coordinateOther = coordinateAux;
+                } while (!board.getCellAt(coordinateSelf).getPiece().getNextMovements().contains(coordinateAux));
+
+                board.getCellAt(coordinateSelf).getPiece().moveTo(coordinateOther); // Move the piece
+                board.removeHighLight();
+
+                board.changeTurn(); // I have to change it before I save
+
+                if (!board.containsKing(whiteKing) || whiteKing.checkMate()){
+                    endGame=true;
+                    finalMessage = "CHECKMATE\n"+playerTwoName+" WINS (BLACK)";
+                } else if (!board.containsKing(blackKing) || blackKing.checkMate()){
+                    endGame=true;
+                    finalMessage = "CHECKMATE\n"+playerOneName+"  WINS (WHITE)";
+                } else if (saveGame){ // it doesn't save the checkmate
+                    try{
+                        save();
+                    } catch (IOException e){
+                        e.printStackTrace();
                     }
                 }
-                coordinateOther = coordinateAux;
-            } while (!board.getCellAt(coordinateSelf).getPiece().getNextMovements().contains(coordinateAux));
-
-            board.getCellAt(coordinateSelf).getPiece().moveTo(coordinateOther); // Move the piece
-            board.removeHighLight();
-
-            if (!board.containsKing(whiteKing) || whiteKing.checkMate()){
-                endGame=true;
-                finalMessage = "CHECKMATE\n"+playerTwoName+" WINS (BLACK)";
             }
 
-            if (!board.containsKing(blackKing) || blackKing.checkMate()){
-                endGame=true;
-                finalMessage = "CHECKMATE\n"+playerOneName+"  WINS (WHITE)";
-            }
-
-            if (!endGame) {
+            if (!endGame) { // if endGame is true (checkmate or dead king) the black turn is skipped
 
                 // --------------------------------- BLACK-TURN ---------------------------------
 
@@ -108,6 +115,7 @@ public class MainChess {
                     Output.OutputPlayerTwo(board,playerTwoName);
 
                     coordinateSelf = Input.enterCoordinate("Select a BLACK piece (Example: B7): ");
+
                 } while (board.getCellAt(coordinateSelf).isEmpty() || !(board.getCellAt(coordinateSelf).getPiece().getColor() == Piece.Color.BLACK));
 
                 board.highLight(board.getCellAt(coordinateSelf).getPiece().getNextMovements());
@@ -131,26 +139,21 @@ public class MainChess {
                 board.getCellAt(coordinateSelf).getPiece().moveTo(coordinateOther); // Move the piece
                 board.removeHighLight();
 
-                if (saveGame){
+                board.changeTurn();
+
+                if (!board.containsKing(whiteKing) || whiteKing.checkMate()){
+                    endGame=true;
+                    finalMessage = "CHECKMATE\n"+playerTwoName+" WINS (BLACK)";
+                } else if (!board.containsKing(blackKing) || blackKing.checkMate()){
+                    endGame=true;
+                    finalMessage = "CHECKMATE\n"+playerOneName+"  WINS (WHITE)";
+                } else if (saveGame){
                     try{
                         save();
                     } catch (IOException e){
                         e.printStackTrace();
                     }
                 }
-
-                if (!board.containsKing(whiteKing) || whiteKing.checkMate()){
-                    endGame=true;
-                    finalMessage = "CHECKMATE\n"+playerTwoName+" WINS (BLACK)";
-                }
-
-                if (!board.containsKing(blackKing) || blackKing.checkMate()){
-                    endGame=true;
-                    finalMessage = "CHECKMATE\n"+playerOneName+"  WINS (WHITE)";
-                }
-
-                firstTurn=false;
-
             }
         }
 
